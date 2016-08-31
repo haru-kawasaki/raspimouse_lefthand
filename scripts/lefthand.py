@@ -31,6 +31,12 @@ def lightsensor_callback(data):
     lightsensors.left_forward = data.left_forward
     lightsensors.right_forward = data.right_forward
 
+def switch_callback(data):
+    switches.front = data.front
+    switches.center = data.center
+    switches.rear = data.rear
+    print data.front, data.center, data.rear
+
 def left_walltrace(ls):
     if too_right(ls):
         turn_left()
@@ -73,10 +79,10 @@ def dead_end(ls):
         and ls.left_forward > th 
 
 def too_right(ls):
-    return ls.right_side > 2000 or ls.right_forward > 2000
+    return ls.right_side > 2000 or ls.right_forward > 1000
 
 def too_left(ls):
-    return ls.left_side > 2000 or ls.left_forward > 2000
+    return ls.left_side > 2000 or ls.left_forward > 1000
 
 def still_wall(ls):
     return ls.left_forward > 500 or ls.right_forward  > 500
@@ -92,14 +98,34 @@ if __name__ == "__main__":
         sys.exit(1)
 
     lightsensors = LightSensorValues()
+    switches = Switches()
     sub_ls = rospy.Subscriber('/raspimouse/lightsensors', LightSensorValues, lightsensor_callback)
+    sub_sw = rospy.Subscriber('/raspimouse/switches', Switches, switch_callback)
     pub_motor = rospy.Publisher('/raspimouse/motor_raw', LeftRightFreq, queue_size=10)
 
     rospy.on_shutdown(stop_motors)
 
+    toggle = True
+    motor_on = True
+
     r = rospy.Rate(20)
     wall = False
     while not rospy.is_shutdown():
+        if switches.front == True:
+            toggle = True
+        elif switches.center == True:
+            toggle = False
+        elif switches.rear == True:
+            toggle = False
+            
+        if not toggle:
+            stop_motors()
+            motor_on = False
+            r.sleep()
+            continue
+        elif not motor_on:
+            switch_motors(True)
+
         if dead_end(lightsensors):
             turn_to_open_space(lightsensors,r)
         elif wall:
@@ -108,7 +134,7 @@ if __name__ == "__main__":
         else:
             left_walltrace(lightsensors)
             wall = find_wall(lightsensors)
-            
+
         r.sleep()
 
     stop_motors()

@@ -1,9 +1,10 @@
 <launch>
   <group ns="raspimouse">
     <node pkg="raspimouse_ros" name="lightsensors" type="rtlightsensors.py" required="true" />
+    <node pkg="raspimouse_ros" name="switches" type="rtswitches.py" required="true" />
     <node pkg="raspimouse_ros" name="motor" type="rtmotor.py" required="true" />
   </group>
   <group ns="lefthand">
-    <node pkg="raspimouse_lefthand" name="lefthand" type="lefthand.py" required="true" />
+    <node pkg="raspimouse_lefthand" name="lefthand" type="lefthand.py" required="true" output="screen" />
   </group>
 </launch>
