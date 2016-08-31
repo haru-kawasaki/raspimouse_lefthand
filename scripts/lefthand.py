@@ -35,7 +35,6 @@ def switch_callback(data):
     switches.front = data.front
     switches.center = data.center
     switches.rear = data.rear
-    print data.front, data.center, data.rear
 
 def left_walltrace(ls):
     if too_right(ls):

@@ -1,6 +1,10 @@
-# raspimouse_lefthand
+# raspimouse_lefthand for_demo
 
-RaspberryPiMouse用、左手法のサンプルコードです。日経Linux 2016年9月号に掲載。連載で扱ったコードは、「ForNikkeiLinux201609」ブランチにあります。
+RaspberryPiMouse用、左手法のサンプルコードです。このブランチはデモ用にON/OFFの切り替えができます。
+
+# 操作方法
+
+真ん中あるいは後方のスイッチでロボットが止まります。前方のスイッチを押すと動作が再開します。
 
 # 必要なパッケージ
 
