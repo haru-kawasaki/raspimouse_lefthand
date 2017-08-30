@@ -7,9 +7,9 @@ from raspimouse_ros.msg import *
 from std_msgs.msg import UInt16
 
 def switch_motors(onoff):
-    rospy.wait_for_service('/raspimouse/switch_motors')
+    rospy.wait_for_service('/switch_motors')
     try:
-        p = rospy.ServiceProxy('/raspimouse/switch_motors', SwitchMotors)
+        p = rospy.ServiceProxy('/switch_motors', SwitchMotors)
         res = p(onoff)
         return res.accepted
     except rospy.ServiceException, e:
@@ -92,8 +92,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     lightsensors = LightSensorValues()
-    sub_ls = rospy.Subscriber('/raspimouse/lightsensors', LightSensorValues, lightsensor_callback)
-    pub_motor = rospy.Publisher('/raspimouse/motor_raw', LeftRightFreq, queue_size=10)
+    sub_ls = rospy.Subscriber('/lightsensors', LightSensorValues, lightsensor_callback)
+    pub_motor = rospy.Publisher('/motor_raw', LeftRightFreq, queue_size=10)
 
     rospy.on_shutdown(stop_motors)
 
